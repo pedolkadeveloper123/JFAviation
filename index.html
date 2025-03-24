@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JF Aviation - Tarefas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('https://i.postimg.cc/mkwn1gsF/jf.webp') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+        .container {
+            max-width: 600px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+        h2 {
+            color: #f4f4f4;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: #555;
+            margin: 10px 0;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+        }
+        li.completed {
+            text-decoration: line-through;
+            background: #4caf50;
+        }
+        .tip {
+            font-size: 12px;
+            color: #ddd;
+            margin-top: 5px;
+        }
+        .clock {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        #message {
+            font-size: 18px;
+            margin-top: 20px;
+            display: none;
+            color: #ffeb3b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Tarefas - JF Aviation</h2>
+        <div class="clock" id="clock"></div>
+        <ul id="taskList"></ul>
+        <p id="message">Parabéns! Você concluiu todas as tarefas do dia com excelência! ✈️🚀</p>
+    </div>
+    <script>
+        const tasks = [
+            { name: "Receber e conferir mercadorias", tip: "Verifique cada item com atenção e registre corretamente." },
+            { name: "Armazenar e organizar produtos", tip: "Separe por categorias e garanta um fácil acesso." },
+            { name: "Separar e repor produtos", tip: "Sempre confira o estoque antes de repor." },
+            { name: "Controlar o estoque", tip: "Mantenha registros atualizados para evitar erros." },
+            { name: "Emitir notas fiscais", tip: "Preencha corretamente os dados para evitar problemas fiscais." },
+            { name: "Localizar lotes a expedir", tip: "Confirme os pedidos antes de enviá-los." },
+            { name: "Auxiliar na carga e descarga", tip: "Use equipamentos adequados para evitar danos." },
+            { name: "Auxiliar na expedição de produtos", tip: "Verifique os destinos antes do envio." },
+            { name: "Auxiliar na entrada e saída de produtos nos sistemas", tip: "Registre cada movimentação corretamente." },
+            { name: "Organização", tip: "Ambientes organizados aumentam a produtividade." },
+            { name: "Proatividade", tip: "Antecipe problemas e ofereça soluções." },
+            { name: "Dinamismo", tip: "Adapte-se rapidamente às mudanças." },
+            { name: "Boa comunicação", tip: "Seja claro e objetivo ao se comunicar." },
+            { name: "Comprometimento", tip: "Dê o seu melhor em cada tarefa." },
+            { name: "Agilidade", tip: "Execute com rapidez, sem comprometer a qualidade." },
+            { name: "Capacidade de resolução de problemas", tip: "Pense antes de agir e busque soluções eficientes." },
+            { name: "Trabalho em equipe", tip: "Colabore e compartilhe conhecimento." }
+        ];
+
+        const taskList = document.getElementById("taskList");
+        const message = document.getElementById("message");
+
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString("pt-BR", { timeZone: "America/Sao_Paulo" });
+            document.getElementById("clock").textContent = `Horário atual: ${timeString}`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        function checkCompletion() {
+            const allCompleted = document.querySelectorAll("li.completed").length === tasks.length;
+            message.style.display = allCompleted ? "block" : "none";
+        }
+
+        tasks.forEach(task => {
+            const li = document.createElement("li");
+            li.innerHTML = `${task.name}`;
+            const tip = document.createElement("p");
+            tip.className = "tip";
+            tip.textContent = task.tip;
+            tip.style.display = "none";
+
+            li.addEventListener("click", () => {
+                li.classList.toggle("completed");
+                if (li.classList.contains("completed")) {
+                    li.innerHTML = `${task.name} 🆗`;
+                    tip.style.display = "block";
+                } else {
+                    li.innerHTML = task.name;
+                    tip.style.display = "none";
+                }
+                li.appendChild(tip);
+                checkCompletion();
+            });
+
+            li.appendChild(tip);
+            taskList.appendChild(li);
+        });
+    </script>
+</body>
+</html>
