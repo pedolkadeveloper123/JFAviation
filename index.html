@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: url('https://i.postimg.cc/mkwn1gsF/jf.webp') no-repeat center center fixed;
+            background: url('background.jpg') no-repeat center center fixed;
             background-size: cover;
             margin: 0;
             padding: 20px;
@@ -59,38 +59,93 @@
             display: none;
             color: #ffeb3b;
         }
+        .progress-bar {
+            width: 100%;
+            background: #444;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .progress {
+            height: 10px;
+            background: #4caf50;
+            width: 0%;
+            border-radius: 5px;
+        }
+        #login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        #login-box {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            text-align: center;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        #app-container {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div id="login-container">
+        <div id="login-box">
+            <h2>Login</h2>
+            <input type="email" id="email" placeholder="Email">
+            <input type="password" id="password" placeholder="Senha">
+            <button onclick="login()">Entrar</button>
+        </div>
+    </div>
+    <div id="app-container" class="container">
         <h2>Tarefas - JF Aviation</h2>
         <div class="clock" id="clock"></div>
+        <div class="progress-bar"><div class="progress" id="progress"></div></div>
         <ul id="taskList"></ul>
         <p id="message">Parabéns! Você concluiu todas as tarefas do dia com excelência! ✈️🚀</p>
     </div>
     <script>
         const tasks = [
-            { name: "Receber e conferir mercadorias", tip: "Verifique cada item com atenção e registre corretamente." },
-            { name: "Armazenar e organizar produtos", tip: "Separe por categorias e garanta um fácil acesso." },
-            { name: "Separar e repor produtos", tip: "Sempre confira o estoque antes de repor." },
-            { name: "Controlar o estoque", tip: "Mantenha registros atualizados para evitar erros." },
-            { name: "Emitir notas fiscais", tip: "Preencha corretamente os dados para evitar problemas fiscais." },
-            { name: "Localizar lotes a expedir", tip: "Confirme os pedidos antes de enviá-los." },
-            { name: "Auxiliar na carga e descarga", tip: "Use equipamentos adequados para evitar danos." },
-            { name: "Auxiliar na expedição de produtos", tip: "Verifique os destinos antes do envio." },
-            { name: "Auxiliar na entrada e saída de produtos nos sistemas", tip: "Registre cada movimentação corretamente." },
-            { name: "Organização", tip: "Ambientes organizados aumentam a produtividade." },
-            { name: "Proatividade", tip: "Antecipe problemas e ofereça soluções." },
-            { name: "Dinamismo", tip: "Adapte-se rapidamente às mudanças." },
-            { name: "Boa comunicação", tip: "Seja claro e objetivo ao se comunicar." },
-            { name: "Comprometimento", tip: "Dê o seu melhor em cada tarefa." },
-            { name: "Agilidade", tip: "Execute com rapidez, sem comprometer a qualidade." },
-            { name: "Capacidade de resolução de problemas", tip: "Pense antes de agir e busque soluções eficientes." },
-            { name: "Trabalho em equipe", tip: "Colabore e compartilhe conhecimento." }
+            "Receber e conferir mercadorias",
+            "Armazenar e organizar produtos",
+            "Separar e repor produtos",
+            "Controlar o estoque",
+            "Emitir notas fiscais",
+            "Localizar lotes a expedir",
+            "Auxiliar na carga e descarga",
+            "Auxiliar na expedição de produtos",
+            "Auxiliar na entrada e saída de produtos nos sistemas",
+            "Organização",
+            "Proatividade",
+            "Dinamismo",
+            "Boa comunicação",
+            "Comprometimento",
+            "Agilidade",
+            "Capacidade de resolução de problemas",
+            "Trabalho em equipe"
         ];
-
-        const taskList = document.getElementById("taskList");
-        const message = document.getElementById("message");
 
         function updateClock() {
             const now = new Date();
@@ -101,33 +156,30 @@
         updateClock();
 
         function checkCompletion() {
-            const allCompleted = document.querySelectorAll("li.completed").length === tasks.length;
-            message.style.display = allCompleted ? "block" : "none";
+            const completedTasks = document.querySelectorAll("li.completed").length;
+            document.getElementById("progress").style.width = (completedTasks / tasks.length) * 100 + "%";
+            document.getElementById("message").style.display = completedTasks === tasks.length ? "block" : "none";
+        }
+
+        function login() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            if (email === "pedrohenriquegta123@gmail.com" && password === "85749226Maevo") {
+                document.getElementById("login-container").style.display = "none";
+                document.getElementById("app-container").style.display = "block";
+            } else {
+                alert("Credenciais inválidas!");
+            }
         }
 
         tasks.forEach(task => {
             const li = document.createElement("li");
-            li.innerHTML = `${task.name}`;
-            const tip = document.createElement("p");
-            tip.className = "tip";
-            tip.textContent = task.tip;
-            tip.style.display = "none";
-
+            li.textContent = task;
             li.addEventListener("click", () => {
                 li.classList.toggle("completed");
-                if (li.classList.contains("completed")) {
-                    li.innerHTML = `${task.name} 🆗`;
-                    tip.style.display = "block";
-                } else {
-                    li.innerHTML = task.name;
-                    tip.style.display = "none";
-                }
-                li.appendChild(tip);
                 checkCompletion();
             });
-
-            li.appendChild(tip);
-            taskList.appendChild(li);
+            document.getElementById("taskList").appendChild(li);
         });
     </script>
 </body>
